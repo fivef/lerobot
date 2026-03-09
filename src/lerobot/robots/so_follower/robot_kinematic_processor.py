@@ -221,13 +221,12 @@ class EEBoundsAndSafety(RobotActionProcessorStep):
         # Clip position
         pos = np.clip(pos, self.end_effector_bounds["min"], self.end_effector_bounds["max"])
 
-        # Check for jumps in position
+        # Check for jumps in position and clip to max step size
         if self._last_pos is not None:
             dpos = pos - self._last_pos
             n = float(np.linalg.norm(dpos))
             if n > self.max_ee_step_m and n > 0:
                 pos = self._last_pos + dpos * (self.max_ee_step_m / n)
-                raise ValueError(f"EE jump {n:.3f}m > {self.max_ee_step_m}m")
 
         self._last_pos = pos
 
